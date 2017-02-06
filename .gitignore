@@ -1,0 +1,6 @@
+local
+release
+src/pos/*.mo
+src/pos/*.pot
+vendor
+*.pyc
