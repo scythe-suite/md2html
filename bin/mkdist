@@ -27,7 +27,7 @@ fi
 if [ ! -r ./vendor/github_markdown_css.py ]; then
     echocol "Getting github-markdown-css"
     curl -sL https://github.com/sindresorhus/github-markdown-css/archive/v2.4.1.tar.gz | tar -C ./vendor --strip 1 --wildcards -zxvf - '*/github-markdown.css'
-    ( echo 'GITHUB_MARKDOWN_CSS="""'; cat ./vendor/github-markdown.css; echo '"""' ) > ./vendor/github_markdown_css.py
+    ( echo 'GITHUB_MARKDOWN_CSS = r"""'; cat ./vendor/github-markdown.css; echo '"""' ) > ./vendor/github_markdown_css.py
     rm -f ./vendor/github-markdown.css
 fi
 echocol "Vendorizing [end]"
