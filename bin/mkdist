@@ -46,7 +46,7 @@ echocol "Preparing zip file"
 
 rm -f $(pwd)/release/md2html
 ( cd $tempdir/dist;  zip -9r $tempdir/md2html.zip . )
-echo '#!/usr/bin/env python' > $(pwd)/release/md2html
+echo '#!/usr/bin/env python2' > $(pwd)/release/md2html
 cat $tempdir/md2html.zip >> $(pwd)/release/md2html
 chmod u+rx $(pwd)/release/md2html
 
