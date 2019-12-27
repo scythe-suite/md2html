@@ -1,0 +1,27 @@
+#!/bin/bash
+
+version="v$(grep 'VERSION\s*=' ./src/__main__.py | cut -d= -f2 | tr -d "' ")"
+
+./bin/mkdist
+
+git tag $version
+git push --tags
+
+github-release release \
+    --user scythe-suite \
+    --repo md2html \
+    --tag $version \
+    --name "$1" \
+    --description "$2" \
+
+github-release upload \
+    --user scythe-suite \
+    --repo md2html \
+    --tag $version \
+    --name md2html \
+    --file ./release/md2html
+
+github-release info \
+    --user scythe-suite \
+    --repo md2html \
+    --tag $version
