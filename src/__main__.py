@@ -1,6 +1,6 @@
 import sys
 import io
-import CommonMark
+import commonmark
 from github_markdown_css import GITHUB_MARKDOWN_CSS
 
 DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,12 +26,19 @@ DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
 </body></html>
 """
 
+VERSION = '1.0.0'
+
 input_filename = sys.argv[1]
+
+if input_filename == 'version':
+  sys.stderr.write('Version: {}\n'.format(VERSION))
+  sys.exit()
+
 title = sys.argv[2]
 output_filename = sys.argv[3]
 
-parser = CommonMark.Parser()
-renderer = CommonMark.HtmlRenderer()
+parser = commonmark.Parser()
+renderer = commonmark.HtmlRenderer()
 with io.open(input_filename, encoding = 'utf-8') as f:
     md = f.read()
 ast = parser.parse(md)

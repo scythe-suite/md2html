@@ -8,46 +8,39 @@ fi
 
 echocol "Setup dirs"
 
-tempdir=$(mktemp -d /tmp/sf-XXXXXXXXX) || exit 1
+tempdir=$(mktemp -d /tmp/md2html-XXXXXXXXX) || exit 1
 
-mkdir -p $tempdir/dist
+mkdir -p "$tempdir/pip"
+mkdir -p "$tempdir/dist"
+rm -rf ./release
 mkdir -p ./release
-mkdir -p ./vendor
 
 echocol "Vendorizing [begin]"
-if [ ! -d ./vendor/CommonMark ]; then
-	echocol "Getting CommonMark"
-	curl -sL https://github.com/rtfd/CommonMark-py/releases/download/0.7.3/CommonMark-0.7.3.tar.gz | tar -C ./vendor --strip 1 --wildcards -zxvf - '*/CommonMark'
-fi
-if [ ! -d ./vendor/future ]; then
-	echocol "Getting future"
-	curl -sL https://github.com/PythonCharmers/python-future/archive/v0.16.0.tar.gz | tar -C ./vendor --strip 2 --wildcards -zxvf - '*/src'
-fi
 
-if [ ! -r ./vendor/github_markdown_css.py ]; then
-    echocol "Getting github-markdown-css"
-    curl -sL https://github.com/sindresorhus/github-markdown-css/archive/v2.4.1.tar.gz | tar -C ./vendor --strip 1 --wildcards -zxvf - '*/github-markdown.css'
-    ( echo 'GITHUB_MARKDOWN_CSS = r"""'; cat ./vendor/github-markdown.css; echo '"""' ) > ./vendor/github_markdown_css.py
-    rm -f ./vendor/github-markdown.css
-fi
+python3 -m pip install --ignore-installed --install-option="--prefix=$tempdir/pip" commonmark # 2>&1
+
+curl -sL https://github.com/sindresorhus/github-markdown-css/archive/v3.0.1.tar.gz | tar -C "$tempdir/pip" --strip 1 --wildcards -zxvf - '*/github-markdown.css'
+( echo 'GITHUB_MARKDOWN_CSS = r"""'; cat "$tempdir/pip/github-markdown.css"; echo '"""' ) > "$tempdir/dist/github_markdown_css.py"
+
+rm -rf "$tempdir"/pip/lib/python3*/site-packages/*.egg-info
+cp -rv "$tempdir"/pip/lib/python3*/site-packages/* "$tempdir/dist"
+
 echocol "Vendorizing [end]"
 
 echocol "Copying source files to dist"
 
 cp -rv ./src/__main__.py $tempdir/dist
-cp -rv ./vendor/* $tempdir/dist
 
-echocol "Compiling and removing source files"
+echocol "Removing stale complied files"
 
-( cd $tempdir/dist; python -m compileall . )
-find $tempdir/dist -name \*.py -exec rm {} \;
+find $tempdir/dist -name __pycache__ -prune -exec rm -rf {} \;
 
 echocol "Preparing zip file"
 
-rm -f $(pwd)/release/md2html
-( cd $tempdir/dist;  zip -9r $tempdir/md2html.zip . )
-echo '#!/usr/bin/env python2' > $(pwd)/release/md2html
-cat $tempdir/md2html.zip >> $(pwd)/release/md2html
-chmod u+rx $(pwd)/release/md2html
+python3 -m zipapp -p '/usr/bin/env python3' "$tempdir/dist" -o ./release/md2html
 
-rm -rf $tempdir
+rm -rf "$tempdir"
+
+echocol "Built version is"
+
+./release/md2html version
