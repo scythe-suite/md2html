@@ -17,8 +17,7 @@ mkdir -p ./release
 
 echocol "Vendorizing [begin]"
 
-python3 -m pip install --ignore-installed --install-option="--prefix=$tempdir/pip" commonmark 2>&1
-
+python3 -m pip install --ignore-installed --install-option="--prefix=$tempdir/pip" Markdown pymdown-extensions 2>&1
 curl -sL https://github.com/sindresorhus/github-markdown-css/archive/v3.0.1.tar.gz | tar -C "$tempdir/pip" --strip 1 --wildcards -zxvf - '*/github-markdown.css'
 ( echo 'GITHUB_MARKDOWN_CSS = r"""'; cat "$tempdir/pip/github-markdown.css"; echo '"""' ) > "$tempdir/dist/github_markdown_css.py"
 

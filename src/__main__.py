@@ -1,6 +1,7 @@
 import sys
-import io
-import commonmark
+from pathlib import Path
+
+import markdown
 from github_markdown_css import GITHUB_MARKDOWN_CSS
 
 DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,7 +27,7 @@ DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
 </body></html>
 """
 
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 
 input_filename = sys.argv[1]
 
@@ -37,11 +38,5 @@ if input_filename == 'version':
 title = sys.argv[2]
 output_filename = sys.argv[3]
 
-parser = commonmark.Parser()
-renderer = commonmark.HtmlRenderer()
-with io.open(input_filename, encoding = 'utf-8') as f:
-    md = f.read()
-ast = parser.parse(md)
-body = renderer.render(ast)
-with io.open(output_filename, 'w', encoding = 'utf-8') as f:
-    f.write(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, body = body))
+body = markdown.markdown(Path(input_filename).read_text(), extensions = ['pymdownx.b64'])
+Path(output_filename).write_text(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, body = body))
