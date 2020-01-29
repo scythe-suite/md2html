@@ -1,7 +1,8 @@
 # md2html
 
-A tool to convert Markdown documents to self-contained HTML with GItHub CSS.
-This is just an hack based on:
+A tool to convert Markdown documents (possibly including external images) to
+self-contained HTML with GItHub CSS. This is just an hack based on:
 
-* [CommonMark-py](https://github.com/rtfd/CommonMark-py), and
+* [Python-Markdown](https://python-markdown.github.io/),
+* [b64](https://facelessuser.github.io/pymdown-extensions/extensions/b64/) from [PyMdown Extensions](https://facelessuser.github.io/pymdown-extensions/), and
 * [github-markdown-css](https://github.com/sindresorhus/github-markdown-css).
