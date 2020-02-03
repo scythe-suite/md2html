@@ -10,11 +10,9 @@ DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <title>{title}</title>
-<style type="text/css">code{{white-space: pre;}}</style>
 <style>
 {github_markdown_css}
-</style>
-<style>
+/* md2html specific */
 .markdown-body {{
     box-sizing: border-box;
     min-width: 200px;
@@ -22,12 +20,15 @@ DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
     margin: 0 auto;
     padding: 45px;
 }}
+code {{
+  white-space: pre-wrap !important;
+  }}
 </style></head><body class="markdown-body">
 {body}
 </body></html>
 """
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 
 input_filename = sys.argv[1]
 
