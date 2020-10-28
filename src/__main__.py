@@ -4,6 +4,8 @@ from pathlib import Path
 import markdown
 from github_markdown_css import GITHUB_MARKDOWN_CSS
 
+from pymdownx.arithmatex import ArithmatexExtension
+
 DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,10 +27,13 @@ code {{
   }}
 </style></head><body class="markdown-body">
 {body}
-</body></html>
+</body>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</html>
 """
 
-VERSION = '1.1.1'
+VERSION = '1.2.0'
 
 input_filename = sys.argv[1]
 
@@ -39,5 +44,5 @@ if input_filename == 'version':
 title = sys.argv[2]
 output_filename = sys.argv[3]
 
-body = markdown.markdown(Path(input_filename).read_text(), extensions = ['pymdownx.b64'])
+body = markdown.markdown(Path(input_filename).read_text(), extensions = ['pymdownx.b64', ArithmatexExtension(generic = True)])
 Path(output_filename).write_text(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, body = body))
