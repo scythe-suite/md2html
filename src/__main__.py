@@ -33,7 +33,7 @@ code {{
 </html>
 """
 
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 
 input_filename = sys.argv[1]
 
@@ -44,5 +44,5 @@ if input_filename == 'version':
 title = sys.argv[2]
 output_filename = sys.argv[3]
 
-body = markdown.markdown(Path(input_filename).read_text(), extensions = ['pymdownx.b64', ArithmatexExtension(generic = True)])
+body = markdown.markdown(Path(input_filename).read_text(), extensions = ['markdown.extensions.tables', 'pymdownx.b64', ArithmatexExtension(generic = True)])
 Path(output_filename).write_text(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, body = body))
