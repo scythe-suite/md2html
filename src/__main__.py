@@ -5,6 +5,7 @@ import markdown
 from github_markdown_css import GITHUB_MARKDOWN_CSS
 
 from pymdownx.arithmatex import ArithmatexExtension
+from pygments.formatters import HtmlFormatter
 
 DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,6 +15,7 @@ DOCUMENT_TEMPLATE = u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
 <title>{title}</title>
 <style>
 {github_markdown_css}
+{pygments_css}
 /* md2html specific */
 .markdown-body {{
     box-sizing: border-box;
@@ -33,7 +35,7 @@ code {{
 </html>
 """
 
-VERSION = '1.3.0'
+VERSION = '2.0.0'
 
 input_filename = sys.argv[1]
 
@@ -44,5 +46,5 @@ if input_filename == 'version':
 title = sys.argv[2]
 output_filename = sys.argv[3]
 
-body = markdown.markdown(Path(input_filename).read_text(), extensions = ['markdown.extensions.tables', 'pymdownx.b64', ArithmatexExtension(generic = True)])
-Path(output_filename).write_text(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, body = body))
+body = markdown.markdown(Path(input_filename).read_text(), extensions = ['markdown.extensions.tables', 'pymdownx.b64', 'pymdownx.superfences', ArithmatexExtension(generic = True)])
+Path(output_filename).write_text(DOCUMENT_TEMPLATE.format(title = title, github_markdown_css = GITHUB_MARKDOWN_CSS, pygments_css = HtmlFormatter().get_style_defs(), body = body))
